@@ -120,9 +120,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -152,26 +152,15 @@ var ScrollPlugin = function (_Plugin) {
 
         _this.name = "ScrollPlugin";
 
-        _this.getOffset = function () {
-            switch (_typeof(_this.options.offset)) {
-                case 'number':
-                    return _this.options.offset;
-                case 'function':
-                    return _this.options.offset();
-                default:
-                    return Number(_this.options.offset);
-            }
-        };
-
         _this.onSamePage = function () {
-            _this.swup.scrollTo(0);
+            _this.swup.scrollTo(0, _this.options.animateScrollOnSamePage);
         };
 
         _this.onSamePageWithHash = function (event) {
             var link = event.delegateTarget;
             var element = document.querySelector(link.hash);
             var top = element.getBoundingClientRect().top + window.pageYOffset - _this.getOffset();
-            _this.swup.scrollTo(top);
+            _this.swup.scrollTo(top, _this.options.animateScrollOnSamePage);
         };
 
         _this.onTransitionStart = function (popstate) {
@@ -194,20 +183,21 @@ var ScrollPlugin = function (_Plugin) {
                     var element = document.querySelector(swup.scrollToElement);
                     if (element != null) {
                         var top = element.getBoundingClientRect().top + window.pageYOffset - _this.getOffset();
-                        swup.scrollTo(top);
+                        swup.scrollTo(top, _this.options.animateScrollOnSamePage);
                     } else {
                         console.warn('Element ' + swup.scrollToElement + ' not found');
                     }
                     swup.scrollToElement = null;
                 } else {
-                    swup.scrollTo(0);
+                    swup.scrollTo(0, _this.options.animateScrollBetweenPages);
                 }
             }
         };
 
         var defaultOptions = {
             doScrollingRightAway: false,
-            animateScroll: true,
+            animateScrollBetweenPages: false,
+            animateScrollOnSamePage: true,
             scrollFriction: 0.3,
             scrollAcceleration: 0.04,
             offset: 0
@@ -242,9 +232,11 @@ var ScrollPlugin = function (_Plugin) {
                 acceleration: this.options.scrollAcceleration
             });
 
-            // set scrollTo method of swup and animate based on current animateScroll option
+            // set scrollTo method of swup and animation
             swup.scrollTo = function (offset) {
-                if (_this2.options.animateScroll) {
+                var animate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+
+                if (animate) {
                     _this2.scrl.scrollTo(offset);
                 } else {
                     swup.triggerEvent('scrollStart');
@@ -288,6 +280,18 @@ var ScrollPlugin = function (_Plugin) {
             this.swup._handlers.scrollStart = null;
 
             window.history.scrollRestoration = 'auto';
+        }
+    }, {
+        key: 'getOffset',
+        value: function getOffset() {
+            switch (_typeof(this.options.offset)) {
+                case 'number':
+                    return this.options.offset;
+                case 'function':
+                    return this.options.offset();
+                default:
+                    return Number(this.options.offset);
+            }
         }
     }]);
 
