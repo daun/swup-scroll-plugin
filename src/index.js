@@ -8,7 +8,8 @@ export default class ScrollPlugin extends Plugin {
         super();
         const defaultOptions = {
             doScrollingRightAway: false,
-            animateScroll: true,
+            animateScrollBetweenPages: false,
+            animateScrollOnSamePage: true,
             scrollFriction: 0.3,
             scrollAcceleration: 0.04,
             offset: 0,
@@ -35,16 +36,16 @@ export default class ScrollPlugin extends Plugin {
             acceleration: this.options.scrollAcceleration,
         });
 
-        // set scrollTo method of swup and animate based on current animateScroll option
-        swup.scrollTo = offset => {
-            if (this.options.animateScroll) {
+        // set scrollTo method of swup and animation
+        swup.scrollTo = (offset, animate = false) => {
+            if (animate) {
                 this.scrl.scrollTo(offset);
             } else {
                 swup.triggerEvent('scrollStart');
                 window.scrollTo(0, offset);
                 swup.triggerEvent('scrollDone');
             }
-        }
+        };
 
         // disable browser scroll control on popstates when
         // animateHistoryBrowsing option is enabled in swup
@@ -82,7 +83,7 @@ export default class ScrollPlugin extends Plugin {
         window.history.scrollRestoration = 'auto';
     }
 
-    getOffset = () => {
+    getOffset() {
         switch (typeof this.options.offset) {
             case 'number':
                 return this.options.offset;
@@ -94,43 +95,44 @@ export default class ScrollPlugin extends Plugin {
     }
 
     onSamePage = () => {
-        this.swup.scrollTo(0);
-    }
+        this.swup.scrollTo(0, this.options.animateScrollOnSamePage);
+    };
 
-    onSamePageWithHash = event => {
+    onSamePageWithHash = (event) => {
         const link = event.delegateTarget;
         const element = document.querySelector(link.hash);
         const top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset();
-        this.swup.scrollTo(top);
-    }
+        this.swup.scrollTo(top, this.options.animateScrollOnSamePage);
+    };
 
-    onTransitionStart = popstate => {
+    onTransitionStart = (popstate) => {
         if (this.options.doScrollingRightAway && !this.swup.scrollToElement) {
             this.doScrolling(popstate);
         }
-    }
+    };
 
-    onContentReplaced = popstate => {
+    onContentReplaced = (popstate) => {
         if (!this.options.doScrollingRightAway || this.swup.scrollToElement) {
             this.doScrolling(popstate);
         }
-    }
+    };
 
-    doScrolling = popstate => {
+    doScrolling = (popstate) => {
         const swup = this.swup;
 
         if (!popstate || swup.options.animateHistoryBrowsing) {
             if (swup.scrollToElement != null) {
                 const element = document.querySelector(swup.scrollToElement);
                 if (element != null) {
-                    let top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset();
-                    swup.scrollTo(top);
+                    let top =
+                        element.getBoundingClientRect().top + window.pageYOffset - this.getOffset();
+                    swup.scrollTo(top, this.options.animateScrollOnSamePage);
                 } else {
                     console.warn(`Element ${swup.scrollToElement} not found`);
                 }
                 swup.scrollToElement = null;
             } else {
-                swup.scrollTo(0);
+                swup.scrollTo(0, this.options.animateScrollBetweenPages);
             }
         }
     };
