@@ -4,13 +4,13 @@
 This plugin can be installed with npm
 
 ```bash
-npm install @swup/scroll-plugin
+npm install @daun/swup-scroll-plugin
 ```
 
 and included with import
 
 ```shell
-import SwupScrollPlugin from '@swup/scroll-plugin';
+import SwupScrollPlugin from '@daun/swup-scroll-plugin';
 ```
 
 or included from the dist folder
