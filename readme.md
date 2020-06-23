@@ -30,11 +30,14 @@ const swup = new Swup({
 ```
 
 ## Options
-### doScrollingRightAway
-`doScrollingRightAway` defines if swup is supposed to wait for the replace of the page to scroll to the top. 
+### animateScrollBetweenPages
+`animateScrollBetweenPages` defines whether the scroll animation is enabled between page visits or swup simply sets the scroll without animation instead.
 
-### animateScroll
-`animateScroll` defines whether the scroll animation is enabled or swup simply sets the scroll without animation instead.
+### animateScrollOnSamePage
+`animateScrollOnSamePage` defines whether the scroll animation is enabled for anchor scrolls on the same page or swup simply sets the scroll without animation instead.
+
+### doScrollingRightAway
+`doScrollingRightAway` defines if swup is supposed to wait for the replace of the page to scroll to the top. Only makes a difference if `animateScrollBetweenPages` is `true`.
 
 ### scrollFriction and scrollAcceleration
 Animation of scroll is adjustable with options `scrollFriction` and `scrollAcceleration`.
@@ -64,7 +67,7 @@ new SwupScrollPlugin({
 ```
 
 ## Changes of swup instance
-Plugins ads `scrollTo` method to the swup instance, which can be later used for custom scrolling. 
+Plugins ads `scrollTo` method to the swup instance, which can be later used for custom scrolling.
 Method accepts offset in pixels or element you want to scroll to.
 
-Plugin also adds `scrollStart` and `scrollDone` events to swup, that can be listened to with `on` method.  
+Plugin also adds `scrollStart` and `scrollDone` events to swup, that can be listened to with `on` method.
