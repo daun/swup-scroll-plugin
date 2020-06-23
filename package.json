@@ -1,7 +1,7 @@
 {
-  "name": "@swup/scroll-plugin",
-  "version": "1.0.6",
-  "description": "Swup scroll plugin.",
+  "name": "@daun/swup-scroll-plugin",
+  "version": "2.0.0",
+  "description": "Swup scroll plugin — fork with additional options.",
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d lib/ src/",
@@ -9,14 +9,21 @@
     "prepublish": "npm run compile && npm run build"
   },
   "author": {
-    "name": "Georgy Marchuk",
-    "email": "gmarcuk@gmail.com",
-    "url": "https://gmrchk.com/"
+    "name": "Philipp Daun",
+    "email": "post@philippdaun.net",
+    "url": "https://philippdaun.net/"
   },
+  "contributors": [
+    {
+      "name": "Georgy Marchuk",
+      "email": "gmarcuk@gmail.com",
+      "url": "https://gmrchk.com/"
+    }
+  ],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/swup/scroll-plugin.git"
+    "url": "https://github.com/philippdaun/swup-scroll-plugin.git"
   },
   "devDependencies": {
     "@swup/prettier-config": "^1.0.0",
