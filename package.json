@@ -2,16 +2,12 @@
   "name": "@daun/swup-scroll-plugin",
   "version": "2.0.0",
   "description": "Swup scroll plugin — fork with additional options.",
+  "author": "Philipp Daun <post@philippdaun.net> (https://philippdaun.net)",
   "main": "lib/index.js",
   "scripts": {
     "compile": "babel --presets es2015,stage-0 -d lib/ src/",
     "build": "webpack-cli",
     "prepublish": "npm run compile && npm run build"
-  },
-  "author": {
-    "name": "Philipp Daun",
-    "email": "post@philippdaun.net",
-    "url": "https://philippdaun.net/"
   },
   "contributors": [
     {
@@ -21,10 +17,18 @@
     }
   ],
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.daun.ltd",
+    "access": "public"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/philippdaun/swup-scroll-plugin.git"
   },
+  "bugs": {
+    "url": "https://github.com/philippdaun/swup-scroll-plugin/issues"
+  },
+  "homepage": "https://github.com/philippdaun/swup-scroll-plugin",
   "devDependencies": {
     "@swup/prettier-config": "^1.0.0",
     "@swup/webpack-config": "^0.1.2",
