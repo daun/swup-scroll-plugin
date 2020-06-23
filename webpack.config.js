@@ -4,7 +4,7 @@ const name = require('./package.json').name;
 const upperFirst = require('lodash/upperFirst');
 const camelCase = require('lodash/camelCase');
 
-const PascalCaseName = upperFirst(camelCase(name));
+const PascalCaseName = upperFirst(camelCase(name.replace(/@[^/]+\//, '')));
 
 const config = Object.assign({}, baseConfig, {
 	entry: {
