@@ -51,7 +51,10 @@ Offset to substract from the final scroll position, to account for fixed headers
   offset: 30,
 
   // Function: calculate offset before scrolling
-  offset: () => document.querySelector('#header').offsetHeight
+  offset: () => document.querySelector('#header').offsetHeight,
+
+  // The scroll target element is passed into the function
+  offset: target => target.offsetHeight * 2,
 }
 ```
 
