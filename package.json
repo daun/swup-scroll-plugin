@@ -1,6 +1,6 @@
 {
   "name": "@daun/swup-scroll-plugin",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Swup scroll plugin — fork with additional options.",
   "author": "Philipp Daun <daun@daun.ltd>",
   "main": "lib/index.js",
