@@ -13,6 +13,7 @@ export default class ScrollPlugin extends Plugin {
             scrollFriction: 0.3,
             scrollAcceleration: 0.04,
             offset: 0,
+            findTarget: (scrollTo) => document.querySelector(scrollTo),
         };
 
         this.options = {
@@ -83,14 +84,14 @@ export default class ScrollPlugin extends Plugin {
         window.history.scrollRestoration = 'auto';
     }
 
-    getOffset() {
+    getOffset = (element = null) => {
         switch (typeof this.options.offset) {
             case 'number':
                 return this.options.offset;
             case 'function':
-                return this.options.offset();
+                return parseInt(this.options.offset(element), 10);
             default:
-                return Number(this.options.offset);
+                return parseInt(this.options.offset, 10);
         }
     }
 
@@ -100,9 +101,13 @@ export default class ScrollPlugin extends Plugin {
 
     onSamePageWithHash = (event) => {
         const link = event.delegateTarget;
-        const element = document.querySelector(link.hash);
-        const top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset();
-        this.swup.scrollTo(top, this.options.animateScrollOnSamePage);
+        const element = this.options.findTarget(link.hash);
+        if (element != null) {
+            const top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset(element);
+            this.swup.scrollTo(top, this.options.animateScrollOnSamePage);
+        } else {
+            console.warn(`Element ${link.hash} not found`);
+        }
     };
 
     onTransitionStart = (popstate) => {
@@ -122,10 +127,9 @@ export default class ScrollPlugin extends Plugin {
 
         if (!popstate || swup.options.animateHistoryBrowsing) {
             if (swup.scrollToElement != null) {
-                const element = document.querySelector(swup.scrollToElement);
+                const element = this.options.findTarget(swup.scrollToElement);
                 if (element != null) {
-                    let top =
-                        element.getBoundingClientRect().top + window.pageYOffset - this.getOffset();
+                    let top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset(element);
                     swup.scrollTo(top, this.options.animateScrollOnSamePage);
                 } else {
                     console.warn(`Element ${swup.scrollToElement} not found`);

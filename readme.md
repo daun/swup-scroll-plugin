@@ -42,6 +42,19 @@ const swup = new Swup({
 ### scrollFriction and scrollAcceleration
 Animation of scroll is adjustable with options `scrollFriction` and `scrollAcceleration`.
 
+### findTarget
+Customize how the scroll target is found on the page. Defaults to looking for matching `id` attributes.
+
+```javascript
+{
+  // Use the `name` attribute instead of `id`
+  findTarget: hash => {
+    const name = hash.replace('#', '')
+    return document.querySelector(`[name="${name}"]`)
+  }
+}
+```
+
 ### offset
 Offset to substract from the final scroll position, to account for fixed headers. Can be either a number or a function that returns the offset.
 
@@ -51,7 +64,10 @@ Offset to substract from the final scroll position, to account for fixed headers
   offset: 30,
 
   // Function: calculate offset before scrolling
-  offset: () => document.querySelector('#header').offsetHeight
+  offset: () => document.querySelector('#header').offsetHeight,
+
+  // The scroll target element is passed into the function
+  offset: target => target.offsetHeight * 2,
 }
 ```
 
