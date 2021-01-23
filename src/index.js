@@ -13,6 +13,7 @@ export default class ScrollPlugin extends Plugin {
             scrollFriction: 0.3,
             scrollAcceleration: 0.04,
             offset: 0,
+            findTarget: (scrollTo) => document.querySelector(scrollTo),
         };
 
         this.options = {
@@ -100,9 +101,13 @@ export default class ScrollPlugin extends Plugin {
 
     onSamePageWithHash = (event) => {
         const link = event.delegateTarget;
-        const element = document.querySelector(link.hash);
-        const top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset(element);
-        this.swup.scrollTo(top, this.options.animateScrollOnSamePage);
+        const element = this.options.findTarget(link.hash);
+        if (element != null) {
+            const top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset(element);
+            this.swup.scrollTo(top, this.options.animateScrollOnSamePage);
+        } else {
+            console.warn(`Element ${link.hash} not found`);
+        }
     };
 
     onTransitionStart = (popstate) => {
@@ -122,7 +127,7 @@ export default class ScrollPlugin extends Plugin {
 
         if (!popstate || swup.options.animateHistoryBrowsing) {
             if (swup.scrollToElement != null) {
-                const element = document.querySelector(swup.scrollToElement);
+                const element = this.options.findTarget(swup.scrollToElement);
                 if (element != null) {
                     let top = element.getBoundingClientRect().top + window.pageYOffset - this.getOffset(element);
                     swup.scrollTo(top, this.options.animateScrollOnSamePage);

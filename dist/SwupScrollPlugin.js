@@ -171,9 +171,13 @@ var ScrollPlugin = function (_Plugin) {
 
         _this.onSamePageWithHash = function (event) {
             var link = event.delegateTarget;
-            var element = document.querySelector(link.hash);
-            var top = element.getBoundingClientRect().top + window.pageYOffset - _this.getOffset(element);
-            _this.swup.scrollTo(top, _this.options.animateScrollOnSamePage);
+            var element = _this.options.findTarget(link.hash);
+            if (element != null) {
+                var top = element.getBoundingClientRect().top + window.pageYOffset - _this.getOffset(element);
+                _this.swup.scrollTo(top, _this.options.animateScrollOnSamePage);
+            } else {
+                console.warn('Element ' + link.hash + ' not found');
+            }
         };
 
         _this.onTransitionStart = function (popstate) {
@@ -193,7 +197,7 @@ var ScrollPlugin = function (_Plugin) {
 
             if (!popstate || swup.options.animateHistoryBrowsing) {
                 if (swup.scrollToElement != null) {
-                    var element = document.querySelector(swup.scrollToElement);
+                    var element = _this.options.findTarget(swup.scrollToElement);
                     if (element != null) {
                         var top = element.getBoundingClientRect().top + window.pageYOffset - _this.getOffset(element);
                         swup.scrollTo(top, _this.options.animateScrollOnSamePage);
@@ -213,7 +217,10 @@ var ScrollPlugin = function (_Plugin) {
             animateScrollOnSamePage: true,
             scrollFriction: 0.3,
             scrollAcceleration: 0.04,
-            offset: 0
+            offset: 0,
+            findTarget: function findTarget(scrollTo) {
+                return document.querySelector(scrollTo);
+            }
         };
 
         _this.options = _extends({}, defaultOptions, options);
